@@ -1,0 +1,20 @@
+{
+  "name": "ai-newsletter-platform",
+  "version": "1.0.0",
+  "description": "AI Newsletter Platform - Simplified AI news for everyone",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/romeshraj/ai-newsletter-platform.git"
+  },
+  "author": "Romesh Raj",
+  "license": "MIT"
+}
