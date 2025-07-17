@@ -1,4 +1,3 @@
-// Sample articles data
 const sampleArticles = [
   {
     id: 1,
@@ -10,7 +9,6 @@ const sampleArticles = [
     readTime: "3 min",
     isDaily: true,
     industry: "General AI",
-    funding: null,
     views: 1247
   },
   {
@@ -36,7 +34,6 @@ const sampleArticles = [
     readTime: "5 min",
     isDaily: true,
     industry: "Hardware",
-    funding: null,
     views: 2156
   },
   {
@@ -49,7 +46,6 @@ const sampleArticles = [
     readTime: "2 min",
     isDaily: true,
     industry: "Platform",
-    funding: null,
     views: 1
   }
 ];
@@ -58,15 +54,8 @@ export default function handler(req, res) {
   const { method, query } = req;
 
   if (method === 'GET') {
-    const {
-      category = 'all',
-      industry,
-      search,
-      page = 1,
-      limit = 20
-    } = query;
+    const { category = 'all', search } = query;
 
-    // Filter articles
     let filteredArticles = sampleArticles;
 
     if (category !== 'all') {
@@ -75,34 +64,16 @@ export default function handler(req, res) {
       );
     }
 
-    if (industry) {
-      filteredArticles = filteredArticles.filter(article => 
-        article.industry === industry
-      );
-    }
-
     if (search) {
       const searchLower = search.toLowerCase();
       filteredArticles = filteredArticles.filter(article =>
         article.title.toLowerCase().includes(searchLower) ||
-        article.summary.toLowerCase().includes(searchLower) ||
-        article.source.toLowerCase().includes(searchLower)
+        article.summary.toLowerCase().includes(searchLower)
       );
     }
 
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
-    const paginatedArticles = filteredArticles.slice(startIndex, endIndex);
-
     res.status(200).json({
-      articles: paginatedArticles,
-      pagination: {
-        current: parseInt(page),
-        total: Math.ceil(filteredArticles.length / limit),
-        hasNext: endIndex < filteredArticles.length,
-        totalArticles: filteredArticles.length
-      },
+      articles: filteredArticles,
       message: 'Articles fetched successfully'
     });
   } else {
