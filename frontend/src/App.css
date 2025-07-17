@@ -610,3 +610,120 @@ body {
     align-items: center;
   }
 }
+
+/* Subscription Page Styles */
+.subscription-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.subscription-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.subscription-card h3 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.subscription-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subscription-card li {
+  padding: 0.5rem 0;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.subscription-form {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subscription-input {
+  padding: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.subscription-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.subscription-btn {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.subscription-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.subscription-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.subscription-note {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.article-funding {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Mobile responsive for subscription */
+@media (max-width: 768px) {
+  .subscription-container {
+    padding: 1rem;
+  }
+  
+  .subscription-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .subscription-form {
+    max-width: 100%;
+  }
+}
