@@ -21,7 +21,7 @@ const AINewsletterPlatform = () => {
 
   const checkBackendHealth = async () => {
     try {
-      const response = await fetch('/pages/api/health');
+      const response = await fetch('/api/health');
       const data = await response.json();
       setBackendStatus(data.status === 'OK' ? 'Connected ✅' : 'Error');
     } catch (error) {
@@ -36,7 +36,7 @@ const AINewsletterPlatform = () => {
       if (selectedCategory !== 'all') params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
       
-      const response = await fetch(`/pages/api/articles?${params}`);
+      const response = await fetch(`/api/articles?${params}`);
       const data = await response.json();
       
       if (data.articles) {

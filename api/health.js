@@ -2,6 +2,7 @@ export default function handler(req, res) {
   res.status(200).json({
     status: 'OK',
     message: 'Backend is working!',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    endpoint: '/api/health'
   });
 }

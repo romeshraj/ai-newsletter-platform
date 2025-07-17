@@ -53,7 +53,8 @@ export default function handler(req, res) {
     
     res.status(200).json({ 
       articles: filteredArticles, 
-      total: filteredArticles.length 
+      total: filteredArticles.length,
+      endpoint: '/api/articles'
     });
   } else {
     res.status(405).json({ error: 'Method not allowed' });
