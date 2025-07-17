@@ -8,12 +8,12 @@ const AINewsletterPlatform = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Demo articles - will be replaced with real backend later
+  // Static articles - no API calls
   const sampleArticles = [
     {
       id: 1,
       title: "🎉 AI Newsletter Platform Successfully Launched!",
-      summary: "Your AI newsletter platform is now live on the internet! Beautiful design, working navigation, and ready for backend integration.",
+      summary: "Your AI newsletter platform is now live on the internet! Beautiful design, working navigation, and ready for users.",
       category: "Platform Update",
       source: "AI Simplified",
       date: new Date().toISOString(),
