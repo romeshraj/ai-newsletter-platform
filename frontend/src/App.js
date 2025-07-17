@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Calendar, TrendingUp, BookOpen, User, Bell, Globe, Filter, Star, ArrowRight, Menu, X } from 'lucide-react';
+import { Search, TrendingUp, BookOpen, User, ArrowRight, Menu, X } from 'lucide-react';
 import './App.css';
 
 const AINewsletterPlatform = () => {
@@ -7,7 +7,6 @@ const AINewsletterPlatform = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Sample data for demo
@@ -46,11 +45,11 @@ const AINewsletterPlatform = () => {
   const testAPIConnection = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/health');
+      const response = await fetch('/api/health');
       const data = await response.json();
       console.log('API Status:', data);
       
-      const articlesResponse = await fetch('http://localhost:3001/api/articles');
+      const articlesResponse = await fetch('/api/articles');
       const articlesData = await articlesResponse.json();
       console.log('Articles API:', articlesData);
     } catch (error) {
