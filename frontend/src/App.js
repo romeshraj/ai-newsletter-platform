@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, TrendingUp, BookOpen, User, ArrowRight, Menu, X } from 'lucide-react';
 import './App.css';
 
@@ -7,60 +7,61 @@ const AINewsletterPlatform = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [backendStatus, setBackendStatus] = useState('Unknown');
 
-  const categories = ['all', 'System Update', 'AI Research', 'Healthcare', 'Hardware'];
-
-  // Fetch articles from backend
-  useEffect(() => {
-    fetchArticles();
-    checkBackendHealth();
-  }, [selectedCategory, searchQuery]);
-
-  const checkBackendHealth = async () => {
-    try {
-      const response = await fetch('/api/health');
-      const data = await response.json();
-      setBackendStatus(data.status === 'OK' ? 'Connected ✅' : 'Error');
-    } catch (error) {
-      setBackendStatus('Offline');
+  // Demo articles - will be replaced with real backend later
+  const sampleArticles = [
+    {
+      id: 1,
+      title: "🎉 AI Newsletter Platform Successfully Launched!",
+      summary: "Your AI newsletter platform is now live on the internet! Beautiful design, working navigation, and ready for backend integration.",
+      category: "Platform Update",
+      source: "AI Simplified",
+      date: new Date().toISOString(),
+      readTime: "2 min",
+      isDaily: true
+    },
+    {
+      id: 2,
+      title: "OpenAI Releases GPT-5: Major AI Breakthrough",
+      summary: "The new model shows significant improvements in reasoning and problem-solving, making AI more helpful for everyday tasks.",
+      category: "AI Research",
+      source: "MIT Technology Review",
+      date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      readTime: "4 min",
+      isDaily: true
+    },
+    {
+      id: 3,
+      title: "Healthcare AI Startup Receives $50M Funding",
+      summary: "New AI system can detect early-stage cancer with 95% accuracy, potentially saving thousands of lives.",
+      category: "Healthcare",
+      source: "TechCrunch",
+      date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      readTime: "3 min",
+      isDaily: false,
+      funding: "$50M Series B"
+    },
+    {
+      id: 4,
+      title: "Google's AI Chip Reduces Energy Use by 40%",
+      summary: "The tech giant's latest processor makes AI computing more environmentally friendly while boosting performance.",
+      category: "Hardware",
+      source: "Wired",
+      date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      readTime: "5 min",
+      isDaily: true
     }
-  };
+  ];
 
-  const fetchArticles = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (selectedCategory !== 'all') params.append('category', selectedCategory);
-      if (searchQuery) params.append('search', searchQuery);
-      
-      const response = await fetch(`/api/articles?${params}`);
-      const data = await response.json();
-      
-      if (data.articles) {
-        setArticles(data.articles);
-      }
-    } catch (error) {
-      console.error('Error fetching articles:', error);
-      // Fallback to demo data
-      setArticles([
-        {
-          id: 1,
-          title: "Backend Connection Failed - Using Demo Data",
-          summary: "Unable to connect to backend API. Displaying demo articles instead.",
-          category: "System Update",
-          source: "Frontend Fallback",
-          date: new Date().toISOString(),
-          readTime: "1 min",
-          isDaily: true
-        }
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const categories = ['all', 'Platform Update', 'AI Research', 'Healthcare', 'Hardware'];
+
+  const filteredArticles = sampleArticles.filter(article => {
+    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
+    const matchesSearch = !searchQuery || 
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.summary.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const HomePage = () => (
     <div className="space-y-12">
@@ -101,15 +102,15 @@ const AINewsletterPlatform = () => {
           <div className="stat-icon">
             <BookOpen className="icon" />
           </div>
-          <h3 className="stat-number">{articles.length}+</h3>
+          <h3 className="stat-number">{sampleArticles.length}+</h3>
           <p className="stat-label">AI Articles</p>
         </div>
         <div className="stat-card stat-purple">
           <div className="stat-icon">
             <User className="icon" />
           </div>
-          <h3 className="stat-number">{backendStatus}</h3>
-          <p className="stat-label">Backend Status</p>
+          <h3 className="stat-number">v1.0</h3>
+          <p className="stat-label">Version</p>
         </div>
       </div>
 
@@ -123,18 +124,11 @@ const AINewsletterPlatform = () => {
             View All <ArrowRight className="icon-sm" />
           </button>
         </div>
-        {loading ? (
-          <div className="loading">
-            <div className="loading-spinner"></div>
-            <p>Loading articles from backend...</p>
-          </div>
-        ) : (
-          <div className="articles-grid">
-            {articles.slice(0, 3).map(article => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        )}
+        <div className="articles-grid">
+          {sampleArticles.slice(0, 3).map(article => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -164,7 +158,7 @@ const AINewsletterPlatform = () => {
       <div className="page-header">
         <h1 className="page-title">All Articles</h1>
         <p className="page-subtitle">
-          Browse through our collection of AI news, loaded from our backend API.
+          Browse through our collection of AI news, simplified for everyone to understand.
         </p>
       </div>
 
@@ -192,20 +186,13 @@ const AINewsletterPlatform = () => {
         </div>
       </div>
 
-      {loading ? (
-        <div className="loading">
-          <div className="loading-spinner"></div>
-          <p>Loading articles from backend...</p>
-        </div>
-      ) : (
-        <div className="articles-grid">
-          {articles.map(article => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-        </div>
-      )}
+      <div className="articles-grid">
+        {filteredArticles.map(article => (
+          <ArticleCard key={article.id} article={article} />
+        ))}
+      </div>
 
-      {articles.length === 0 && !loading && (
+      {filteredArticles.length === 0 && (
         <div className="empty-state">
           <Search className="empty-icon" />
           <h3 className="empty-title">No articles found</h3>
@@ -226,19 +213,25 @@ const AINewsletterPlatform = () => {
 
       <div className="subscription-container">
         <div className="subscription-card">
-          <h3>🤖 AI Newsletter (Backend Ready!)</h3>
+          <h3>🤖 AI Newsletter (Coming Soon!)</h3>
           <ul>
             <li>✅ Daily AI news summaries</li>
             <li>✅ Weekly trend analysis</li>
             <li>✅ Funding and startup updates</li>
             <li>✅ Explained in simple terms</li>
-            <li>✅ Backend API connected</li>
+            <li>✅ 100% Free forever</li>
           </ul>
           
           <div className="coming-soon">
-            <p>📧 Email subscriptions coming soon!</p>
-            <p>Backend Status: <strong>{backendStatus}</strong></p>
-            <p>Articles loaded from API: <strong>{articles.length}</strong></p>
+            <p>📧 <strong>Email subscriptions launching soon!</strong></p>
+            <p>🔧 Backend development in progress</p>
+            <p>📖 For now, bookmark this site for daily updates</p>
+            <br/>
+            <p><strong>✨ What's working now:</strong></p>
+            <p>• Beautiful, responsive design</p>
+            <p>• Article browsing and search</p>
+            <p>• Mobile-friendly interface</p>
+            <p>• Ready for viral sharing!</p>
           </div>
         </div>
       </div>
