@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, TrendingUp, BookOpen, User, ArrowRight, Menu, X } from 'lucide-react';
 import './App.css';
 
@@ -7,99 +7,53 @@ const AINewsletterPlatform = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [subscriptionEmail, setSubscriptionEmail] = useState('');
-  const [subscriptionStatus, setSubscriptionStatus] = useState('');
 
-  const categories = ['all', 'AI Research', 'Healthcare', 'Hardware', 'System Update', 'Funding', 'Enterprise'];
-
-  // Fetch articles from backend API
-  useEffect(() => {
-    fetchArticles();
-  }, [selectedCategory, searchQuery]);
-
-  const fetchArticles = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (selectedCategory !== 'all') params.append('category', selectedCategory);
-      if (searchQuery) params.append('search', searchQuery);
-      
-      const response = await fetch(`/api/articles?${params}`);
-      const data = await response.json();
-      
-      if (data.articles) {
-        setArticles(data.articles);
-      }
-    } catch (error) {
-      console.error('Error fetching articles:', error);
-      // Fallback to demo data if API fails
-      setArticles([
-        {
-          id: 1,
-          title: "Backend API Connected Successfully!",
-          summary: "Your AI Newsletter Platform now has a working backend with real API endpoints for articles and subscriptions.",
-          category: "System Update",
-          source: "AI Simplified",
-          date: new Date().toISOString(),
-          readTime: "1 min",
-          isDaily: true
-        }
-      ]);
-    } finally {
-      setLoading(false);
+  const sampleArticles = [
+    {
+      id: 1,
+      title: "🎉 AI Newsletter Platform Successfully Launched!",
+      summary: "Your AI newsletter platform is now live on the internet! Features include article browsing, search functionality, and a beautiful responsive design.",
+      category: "Platform Update",
+      source: "AI Simplified",
+      date: new Date().toISOString(),
+      readTime: "2 min",
+      isDaily: true
+    },
+    {
+      id: 2,
+      title: "OpenAI Releases GPT-5: Major AI Breakthrough",
+      summary: "The new model shows significant improvements in reasoning and problem-solving, making AI more helpful for everyday tasks.",
+      category: "AI Research",
+      source: "MIT Technology Review",
+      date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      readTime: "4 min",
+      isDaily: true
+    },
+    {
+      id: 3,
+      title: "Healthcare AI Startup Receives $50M Funding",
+      summary: "New AI system can detect early-stage cancer with 95% accuracy, potentially saving thousands of lives.",
+      category: "Healthcare",
+      source: "TechCrunch",
+      date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      readTime: "3 min",
+      isDaily: false,
+      funding: "$50M Series B"
     }
-  };
+  ];
 
-  const handleSubscription = async (e) => {
-    e.preventDefault();
-    if (!subscriptionEmail) return;
+  const categories = ['all', 'Platform Update', 'AI Research', 'Healthcare', 'Hardware'];
 
-    setLoading(true);
-    try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: subscriptionEmail,
-          subscriptionType: 'both'
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        setSubscriptionStatus('success');
-        setSubscriptionEmail('');
-        alert(`🎉 ${data.message}\n\n${data.welcome}`);
-      } else {
-        setSubscriptionStatus('error');
-        alert(`❌ ${data.error}`);
-      }
-    } catch (error) {
-      console.error('Subscription error:', error);
-      setSubscriptionStatus('error');
-      alert('❌ Failed to subscribe. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filteredArticles = articles.filter(article => {
-    if (!article) return false;
+  const filteredArticles = sampleArticles.filter(article => {
     const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
     const matchesSearch = !searchQuery || 
-      article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.summary?.toLowerCase().includes(searchQuery.toLowerCase());
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.summary.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const HomePage = () => (
     <div className="space-y-12">
-      {/* Hero Section */}
       <div className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -125,20 +79,19 @@ const AINewsletterPlatform = () => {
         </div>
       </div>
 
-      {/* Stats Section */}
       <div className="stats-grid">
         <div className="stat-card stat-green">
           <div className="stat-icon">
             <TrendingUp className="icon" />
           </div>
-          <h3 className="stat-number">Live!</h3>
-          <p className="stat-label">Backend Status</p>
+          <h3 className="stat-number">Live! 🚀</h3>
+          <p className="stat-label">Platform Status</p>
         </div>
         <div className="stat-card stat-blue">
           <div className="stat-icon">
             <BookOpen className="icon" />
           </div>
-          <h3 className="stat-number">{articles.length}+</h3>
+          <h3 className="stat-number">{sampleArticles.length}+</h3>
           <p className="stat-label">AI Articles</p>
         </div>
         <div className="stat-card stat-purple">
@@ -146,11 +99,10 @@ const AINewsletterPlatform = () => {
             <User className="icon" />
           </div>
           <h3 className="stat-number">You!</h3>
-          <p className="stat-label">Early User</p>
+          <p className="stat-label">First Visitor</p>
         </div>
       </div>
 
-      {/* Latest Articles */}
       <div className="articles-section">
         <div className="section-header">
           <h2 className="section-title">Latest AI News</h2>
@@ -162,7 +114,7 @@ const AINewsletterPlatform = () => {
           </button>
         </div>
         <div className="articles-grid">
-          {articles.slice(0, 3).map(article => (
+          {sampleArticles.slice(0, 3).map(article => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
@@ -174,7 +126,7 @@ const AINewsletterPlatform = () => {
     <div className="article-card">
       <div className="article-header">
         <span className={`article-badge ${article.isDaily ? 'badge-green' : 'badge-blue'}`}>
-          {article.isDaily ? 'Daily Update' : 'Weekly Deep-Dive'}
+          {article.isDaily ? 'Daily Update' : 'Weekly Analysis'}
         </span>
         <span className="article-time">{article.readTime}</span>
       </div>
@@ -199,7 +151,6 @@ const AINewsletterPlatform = () => {
         </p>
       </div>
 
-      {/* Filters */}
       <div className="filters-container">
         <div className="filter-buttons">
           {categories.map(category => (
@@ -224,22 +175,13 @@ const AINewsletterPlatform = () => {
         </div>
       </div>
 
-      {/* Loading */}
-      {loading && (
-        <div className="loading">
-          <div className="loading-spinner"></div>
-          <p>Loading articles...</p>
-        </div>
-      )}
-
-      {/* Articles Grid */}
       <div className="articles-grid">
         {filteredArticles.map(article => (
           <ArticleCard key={article.id} article={article} />
         ))}
       </div>
 
-      {filteredArticles.length === 0 && !loading && (
+      {filteredArticles.length === 0 && (
         <div className="empty-state">
           <Search className="empty-icon" />
           <h3 className="empty-title">No articles found</h3>
@@ -260,7 +202,7 @@ const AINewsletterPlatform = () => {
 
       <div className="subscription-container">
         <div className="subscription-card">
-          <h3>🤖 AI Newsletter</h3>
+          <h3>🤖 AI Newsletter (Coming Soon!)</h3>
           <ul>
             <li>✅ Daily AI news summaries</li>
             <li>✅ Weekly trend analysis</li>
@@ -269,27 +211,10 @@ const AINewsletterPlatform = () => {
             <li>✅ 100% Free forever</li>
           </ul>
           
-          <form onSubmit={handleSubscription} className="subscription-form">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              value={subscriptionEmail}
-              onChange={(e) => setSubscriptionEmail(e.target.value)}
-              required
-              className="subscription-input"
-            />
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="subscription-btn"
-            >
-              {loading ? 'Subscribing...' : 'Subscribe Free'}
-            </button>
-          </form>
-          
-          <p className="subscription-note">
-            No spam, unsubscribe anytime. Join 1,247+ AI enthusiasts!
-          </p>
+          <div className="coming-soon">
+            <p>📧 Email subscriptions will be available soon!</p>
+            <p>For now, bookmark this site and visit daily for updates.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -308,7 +233,6 @@ const AINewsletterPlatform = () => {
           <span className="brand-name">AI Simplified</span>
         </div>
 
-        {/* Desktop Navigation */}
         <div className="nav-links">
           <button 
             onClick={() => setCurrentPage('home')}
@@ -330,7 +254,6 @@ const AINewsletterPlatform = () => {
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
         <button 
           className="mobile-menu-btn"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -339,7 +262,6 @@ const AINewsletterPlatform = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="mobile-nav">
           <button 
